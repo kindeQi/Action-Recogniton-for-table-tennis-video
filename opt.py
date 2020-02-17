@@ -4,244 +4,238 @@ import argparse
 def parse_opts():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--get_featuremap',
+        "--get_featuremap",
         default=False,
         type=bool,
-        help='the network return the class result or the feature map')
+        help="the network return the class result or the feature map",
+    )
     parser.add_argument(
-        '--device',
-        default=[0,1],
-        type=list,
-        help='the devices which are available')
+        "--device", default=[0, 1], type=list, help="the devices which are available"
+    )
     parser.add_argument(
-        '--demo_mode',
+        "--demo_mode",
         default=True,
         type=bool,
-        help='when is demo, the dataset will be different')
-    parser.add_argument(
-        '--video_path',
-        default='/data2/UCF-101-jpgs',
-        type=str,
-        help='Directory path of Videos')
-    parser.add_argument(
-        '--annotation_path',
-        default='/home/zhangrui/my_project/UCF101TrainTestSplits-RecognitionTask/ucfTrainTestlist/ucf101_01.json',
-        type=str,
-        help='Annotation file path')
-    parser.add_argument(
-        '--result_path',
-        default='results',
-        type=str,
-        help='Result directory path')
-    parser.add_argument(
-        '--dataset',
-        default='pingpong_dataset',
-        type=str,
-        help='Used dataset ucf101 or pingpong_dataset)')
-    parser.add_argument(
-        '--n_classes',
-        default=400,
-        type=int,
-        help=
-        'Number of classes 400'
+        help="when is demo, the dataset will be different",
     )
     parser.add_argument(
-        '--n_finetune_classes',
+        "--video_path",
+        default="/data2/UCF-101-jpgs",
+        type=str,
+        help="Directory path of Videos",
+    )
+    parser.add_argument(
+        "--annotation_path",
+        default="/home/zhangrui/my_project/UCF101TrainTestSplits-RecognitionTask/ucfTrainTestlist/ucf101_01.json",
+        type=str,
+        help="Annotation file path",
+    )
+    parser.add_argument(
+        "--result_path", default="results", type=str, help="Result directory path"
+    )
+    parser.add_argument(
+        "--dataset",
+        default="pingpong_dataset",
+        type=str,
+        help="Used dataset ucf101 or pingpong_dataset)",
+    )
+    parser.add_argument(
+        "--n_classes", default=400, type=int, help="Number of classes 400"
+    )
+    parser.add_argument(
+        "--n_finetune_classes",
         default=9,
         type=int,
-        help=
-        'Number of classes for fine-tuning. n_classes is set to the number when pretraining.'
+        help="Number of classes for fine-tuning. n_classes is set to the number when pretraining.",
     )
     parser.add_argument(
-        '--sample_size',
-        default=112,
-        type=int,
-        help='Height and width of inputs')
+        "--sample_size", default=112, type=int, help="Height and width of inputs"
+    )
     parser.add_argument(
-        '--sample_duration',
-        default=16,
-        type=int,
-        help='Temporal duration of inputs')
+        "--sample_duration", default=16, type=int, help="Temporal duration of inputs"
+    )
     parser.add_argument(
-        '--initial_scale',
+        "--initial_scale",
         default=1.0,
         type=float,
-        help='Initial scale for multiscale cropping')
+        help="Initial scale for multiscale cropping",
+    )
     parser.add_argument(
-        '--n_scales',
+        "--n_scales",
         default=5,
         type=int,
-        help='Number of scales for multiscale cropping')
+        help="Number of scales for multiscale cropping",
+    )
     parser.add_argument(
-        '--scale_step',
+        "--scale_step",
         default=0.84089641525,
         type=float,
-        help='Scale step for multiscale cropping')
-    parser.add_argument(
-        '--train_crop',
-        default='random',
-        type=str,
-        help=
-        'Spatial cropping method in training. random is uniform. corner is selection from 4 corners and 1 center.  (random | corner | center)'
+        help="Scale step for multiscale cropping",
     )
     parser.add_argument(
-        '--learning_rate',
+        "--train_crop",
+        default="random",
+        type=str,
+        help="Spatial cropping method in training. random is uniform. corner is selection from 4 corners and 1 center.  (random | corner | center)",
+    )
+    parser.add_argument(
+        "--learning_rate",
         default=0.001,
         type=float,
-        help=
-        'Initial learning rate (divided by 5 while training by lr scheduler)')
-    parser.add_argument('--momentum', default=0.9, type=float, help='Momentum')
-    parser.add_argument(
-        '--dampening', default=0.9, type=float, help='dampening of SGD')
+        help="Initial learning rate (divided by 5 while training by lr scheduler)",
+    )
+    parser.add_argument("--momentum", default=0.9, type=float, help="Momentum")
+    parser.add_argument("--dampening", default=0.9, type=float, help="dampening of SGD")
     # parser\
 
+    parser.add_argument("--weight_decay", default=1e-3, type=float, help="Weight Decay")
     parser.add_argument(
-        '--weight_decay', default=1e-3, type=float, help='Weight Decay')
-    parser.add_argument(
-        '--mean_dataset',
-        default='kinetics',
+        "--mean_dataset",
+        default="kinetics",
         type=str,
-        help=
-        'dataset for mean values of mean subtraction (activitynet | kinetics)')
+        help="dataset for mean values of mean subtraction (activitynet | kinetics)",
+    )
     parser.add_argument(
-        '--no_mean_norm',
-        action='store_true',
-        help='If true, inputs are not normalized by mean.')
+        "--no_mean_norm",
+        action="store_true",
+        help="If true, inputs are not normalized by mean.",
+    )
     parser.set_defaults(no_mean_norm=False)
     parser.add_argument(
-        '--std_norm',
-        action='store_true',
-        help='If true, inputs are normalized by standard deviation.')
+        "--std_norm",
+        action="store_true",
+        help="If true, inputs are normalized by standard deviation.",
+    )
     parser.set_defaults(std_norm=False)
-    parser.add_argument(
-        '--nesterov', action='store_true', help='Nesterov momentum')
+    parser.add_argument("--nesterov", action="store_true", help="Nesterov momentum")
     parser.set_defaults(nesterov=False)
     parser.add_argument(
-        '--optimizer',
-        default='sgd',
-        type=str,
-        help='Currently only support SGD')
+        "--optimizer", default="sgd", type=str, help="Currently only support SGD"
+    )
     parser.add_argument(
-        '--lr_patience',
+        "--lr_patience",
         default=10,
         type=int,
-        help='Patience of LR scheduler. See documentation of ReduceLROnPlateau.'
+        help="Patience of LR scheduler. See documentation of ReduceLROnPlateau.",
+    )
+    parser.add_argument("--batch_size", default=128, type=int, help="Batch Size")
+    parser.add_argument(
+        "--n_epochs", default=400, type=int, help="Number of total epochs to run"
     )
     parser.add_argument(
-        '--batch_size', default=128, type=int, help='Batch Size')
-    parser.add_argument(
-        '--n_epochs',
-        default=400,
-        type=int,
-        help='Number of total epochs to run')
-    parser.add_argument(
-        '--begin_epoch',
+        "--begin_epoch",
         default=1,
         type=int,
-        help=
-        'Training begins at this epoch. Previous trained model indicated by resume_path is loaded.'
+        help="Training begins at this epoch. Previous trained model indicated by resume_path is loaded.",
     )
     parser.add_argument(
-        '--n_val_samples',
+        "--n_val_samples",
         default=3,
         type=int,
-        help='Number of validation samples for each activity')
+        help="Number of validation samples for each activity",
+    )
     parser.add_argument(
-        '--resume_path',
-        default='',
+        "--resume_path",
+        default="",
         type=str,
-        help='Save data (.pth) of previous training')
+        help="Save data (.pth) of previous training",
+    )
     parser.add_argument(
-        '--pretrain_path',
+        "--pretrain_path",
         # default='/home/zhangrui/my_project/resnet-18-kinetics.pth',
-        default='/home/zhangrui/my_project/results/save_150.pth',
-        type=str, help='Pretrained model (.pth)')
+        default="/home/zhangrui/my_project/results/save_150.pth",
+        type=str,
+        help="Pretrained model (.pth)",
+    )
     parser.add_argument(
-        '--ft_begin_index',
-        default=4,
-        type=int,
-        help='Begin block index of fine-tuning')
+        "--ft_begin_index", default=4, type=int, help="Begin block index of fine-tuning"
+    )
     parser.add_argument(
-        '--no_train',
-        action='store_true',
-        help='If true, training is not performed.')
+        "--no_train", action="store_true", help="If true, training is not performed."
+    )
     parser.set_defaults(no_train=False)
     parser.add_argument(
-        '--no_val',
-        action='store_true',
-        help='If true, validation is not performed.')
+        "--no_val", action="store_true", help="If true, validation is not performed."
+    )
     parser.set_defaults(no_val=False)
     parser.add_argument(
-        '--test', action='store_true', help='If true, test is performed.')
+        "--test", action="store_true", help="If true, test is performed."
+    )
     parser.set_defaults(test=False)
     parser.add_argument(
-        '--test_subset',
-        default='val',
+        "--test_subset",
+        default="val",
         type=str,
-        help='Used subset in test (val | test)')
+        help="Used subset in test (val | test)",
+    )
     parser.add_argument(
-        '--scale_in_test',
-        default=1.0,
-        type=float,
-        help='Spatial scale in test')
+        "--scale_in_test", default=1.0, type=float, help="Spatial scale in test"
+    )
     parser.add_argument(
-        '--crop_position_in_test',
-        default='c',
+        "--crop_position_in_test",
+        default="c",
         type=str,
-        help='Cropping method (c | tl | tr | bl | br) in test')
+        help="Cropping method (c | tl | tr | bl | br) in test",
+    )
     parser.add_argument(
-        '--no_softmax_in_test',
-        action='store_true',
-        help='If true, output for each clip is not normalized using softmax.')
+        "--no_softmax_in_test",
+        action="store_true",
+        help="If true, output for each clip is not normalized using softmax.",
+    )
     parser.set_defaults(no_softmax_in_test=False)
     parser.add_argument(
-        '--no_cuda', action='store_true', help='If true, cuda is not used.')
+        "--no_cuda", action="store_true", help="If true, cuda is not used."
+    )
     parser.set_defaults(no_cuda=False)
     parser.add_argument(
-        '--n_threads',
+        "--n_threads",
         default=18,
         type=int,
-        help='Number of threads for multi-thread loading')
+        help="Number of threads for multi-thread loading",
+    )
     parser.add_argument(
-        '--checkpoint',
+        "--checkpoint",
         default=10,
         type=int,
-        help='Trained model is saved at every this epochs.')
+        help="Trained model is saved at every this epochs.",
+    )
     parser.add_argument(
-        '--no_hflip',
-        action='store_true',
-        help='If true holizontal flipping is not performed.')
+        "--no_hflip",
+        action="store_true",
+        help="If true holizontal flipping is not performed.",
+    )
     parser.set_defaults(no_hflip=False)
     parser.add_argument(
-        '--norm_value',
+        "--norm_value",
         default=1,
         type=int,
-        help=
-        'If 1, range of inputs is [0-255]. If 255, range of inputs is [0-1].')
+        help="If 1, range of inputs is [0-255]. If 255, range of inputs is [0-1].",
+    )
     parser.add_argument(
-        '--model',
-        default='resnet',
+        "--model",
+        default="resnet",
         type=str,
-        help='(resnet | preresnet | wideresnet | resnext | densenet | ')
+        help="(resnet | preresnet | wideresnet | resnext | densenet | ",
+    )
     parser.add_argument(
-        '--model_depth',
+        "--model_depth",
         default=18,
         type=int,
-        help='Depth of resnet (10 | 18 | 34 | 50 | 101)')
+        help="Depth of resnet (10 | 18 | 34 | 50 | 101)",
+    )
     parser.add_argument(
-        '--resnet_shortcut',
-        default='A',
+        "--resnet_shortcut",
+        default="A",
         type=str,
-        help='Shortcut type of resnet (A | B)')
+        help="Shortcut type of resnet (A | B)",
+    )
+    parser.add_argument("--wide_resnet_k", default=2, type=int, help="Wide resnet k")
     parser.add_argument(
-        '--wide_resnet_k', default=2, type=int, help='Wide resnet k')
+        "--resnext_cardinality", default=32, type=int, help="ResNeXt cardinality"
+    )
     parser.add_argument(
-        '--resnext_cardinality',
-        default=32,
-        type=int,
-        help='ResNeXt cardinality')
-    parser.add_argument(
-        '--manual_seed', default=1, type=int, help='Manually set random seed')
+        "--manual_seed", default=1, type=int, help="Manually set random seed"
+    )
 
     args = parser.parse_args()
 

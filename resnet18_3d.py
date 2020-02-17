@@ -9,8 +9,8 @@ from functools import partial
 def downsample_basic_block(x, planes, stride):
     out = F.avg_pool3d(x, kernel_size=1, stride=stride)
     zero_pads = torch.Tensor(
-        out.size(0), planes - out.size(1), out.size(2), out.size(3),
-        out.size(4)).zero_()
+        out.size(0), planes - out.size(1), out.size(2), out.size(3), out.size(4)
+    ).zero_()
     if isinstance(out.data, torch.cuda.FloatTensor):
         zero_pads = zero_pads.cuda(2)
 
@@ -20,16 +20,27 @@ def downsample_basic_block(x, planes, stride):
 
 
 class BasicBlock(nn.Module):
-
     def __init__(self, inplanes, planes, stride=1, downsample=None):
         super(BasicBlock, self).__init__()
-        self.conv1 = nn.Conv3d(in_channels=inplanes, out_channels=planes, kernel_size=3,
-                               stride=stride, padding=1, bias=False)
+        self.conv1 = nn.Conv3d(
+            in_channels=inplanes,
+            out_channels=planes,
+            kernel_size=3,
+            stride=stride,
+            padding=1,
+            bias=False,
+        )
         self.bn1 = nn.BatchNorm3d(planes)
         self.relu = nn.ReLU(inplace=True)
 
-        self.conv2 = nn.Conv3d(in_channels=planes, out_channels=planes, kernel_size=3,
-                               stride=1, padding=1, bias=False)
+        self.conv2 = nn.Conv3d(
+            in_channels=planes,
+            out_channels=planes,
+            kernel_size=3,
+            stride=1,
+            padding=1,
+            bias=False,
+        )
         self.bn2 = nn.BatchNorm3d(planes)
         self.downsample = downsample
         self.stride = stride
@@ -54,23 +65,13 @@ class BasicBlock(nn.Module):
 
 
 class ResNet(nn.Module):
-
-    def __init__(self,
-                 opt,
-                 sample_size,
-                 sample_duration,
-                 num_classes=400,
-                 ):
+    def __init__(self, opt, sample_size, sample_duration, num_classes=400):
         self.opt = opt
         self.inplanes = 64
         super(ResNet, self).__init__()
         self.conv1 = nn.Conv3d(
-            3,
-            64,
-            kernel_size=7,
-            stride=(1, 2, 2),
-            padding=(3, 3, 3),
-            bias=False)
+            3, 64, kernel_size=7, stride=(1, 2, 2), padding=(3, 3, 3), bias=False
+        )
         self.bn1 = nn.BatchNorm3d(64)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool3d(kernel_size=(3, 3, 3), stride=2, padding=1)
@@ -82,13 +83,12 @@ class ResNet(nn.Module):
 
         last_duration = int(math.ceil(sample_duration / 16))
         last_size = int(math.ceil(sample_size / 32))
-        self.avgpool = nn.AvgPool3d(
-            (last_duration, last_size, last_size), stride=1)
+        self.avgpool = nn.AvgPool3d((last_duration, last_size, last_size), stride=1)
         self.fc = nn.Linear(512, num_classes)
 
         for m in self.modules():
             if isinstance(m, nn.Conv3d):
-                m.weight = nn.init.kaiming_normal(m.weight, mode='fan_out')
+                m.weight = nn.init.kaiming_normal(m.weight, mode="fan_out")
             elif isinstance(m, nn.BatchNorm3d):
                 m.weight.data.fill_(1)
                 m.bias.data.zero_()
@@ -96,10 +96,10 @@ class ResNet(nn.Module):
     def _make_layer(self, inplanes, planes, stride=1):
         downsample = None
         if stride != 1 or inplanes != planes:
-            downsample = partial(downsample_basic_block,
-                planes=planes,
-                stride=stride)
-        block1 = BasicBlock(inplanes=inplanes, planes=planes, stride=stride, downsample=downsample)
+            downsample = partial(downsample_basic_block, planes=planes, stride=stride)
+        block1 = BasicBlock(
+            inplanes=inplanes, planes=planes, stride=stride, downsample=downsample
+        )
         block2 = BasicBlock(inplanes=planes, planes=planes)
 
         return nn.Sequential(block1, block2)
@@ -122,6 +122,6 @@ class ResNet(nn.Module):
         if not self.opt.get_featuremap:
             x = self.fc(x)
         else:
-            print('get feature map')
+            print("get feature map")
 
         return x

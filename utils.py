@@ -1,5 +1,6 @@
 import csv
 
+
 class AverageMeter(object):
     """Computes and stores the average and current value"""
 
@@ -20,10 +21,9 @@ class AverageMeter(object):
 
 
 class Logger(object):
-
     def __init__(self, path, header):
-        self.log_file = open(path, 'w')
-        self.logger = csv.writer(self.log_file, delimiter='\t')
+        self.log_file = open(path, "w")
+        self.logger = csv.writer(self.log_file, delimiter="\t")
 
         self.logger.writerow(header)
         self.header = header
@@ -42,8 +42,8 @@ class Logger(object):
 
 
 def load_value_file(file_path):
-    with open(file_path, 'r') as input_file:
-        value = float(input_file.read().rstrip('\n\r'))
+    with open(file_path, "r") as input_file:
+        value = float(input_file.read().rstrip("\n\r"))
 
     return value
 
@@ -61,7 +61,8 @@ def calculate_accuracy(predict, target, top_n=1):
         if (item in t) == True:
             correct += 1
 
-    return 1. * correct / n_samples
+    return 1.0 * correct / n_samples
+
 
 def calculate_accuracy(predict, target, top_n=1):
     assert len(target) == len(predict)
@@ -76,4 +77,4 @@ def calculate_accuracy(predict, target, top_n=1):
         if (item in t) == True:
             correct += 1
 
-    return 1. * correct / n_samples
+    return 1.0 * correct / n_samples
